@@ -214,6 +214,17 @@ In the following snippet =~/doom-emacs= is where you have cloned doom emacs.
 
 Please refer to [[https://github.com/plexus/chemacs/issues/5][this]] discussion for details.
 
+** Relative profile directories
+
+=user-emacs-directory= in =.emacs-profiles.el= can be specified as well as a relative path. In that scenario, the path has to be written as the path relative to the =~/.emacs-profiles/= or =$XDG_CONFIG_HOME/chemacs/profiles/= directory. If both of these directories exists than the =~/.emacs-profiles/= will be used. Relative and absolute paths can be mixed together for different profiles in single =.emacs-profiles.el= file.
+
+In below example, loading both profiles: =default= and =default-relative= could result in the same =user-emacs-directory= equal to =~/.emacs-profiles/default/=. It can be different when =~/.emacs-profiles/= would not exists then existence of =$XDG_CONFIG_HOME/chemacs/profiles/= would be checked. If the second one exists, the =default-relative= =user-emacs-directory= would point to =$XDG_CONFIG_HOME/chemacs/profiles/default/= instead.
+
+#+BEGIN_SRC emacs-lisp
+  (("default" . ((user-emacs-directory . "~/.emacs-profiles/default/")))
+   ("default-relative" . ((user-emacs-directory . "default"))))
+#+END_SRC
+
 ** FreeDesktop Directories
 
 Both =~/.emacs-profiles.el= and =~/.emacs-profile= can also be stored under =$XDG_CONFIG_HOME/chemacs= (typically =~/.config/chemacs=) as =$XGD_CONFIG_HOME/chemacs/profiles.el= and =$XDG_CONFIG_HOME/chemacs/profile= respectively.
