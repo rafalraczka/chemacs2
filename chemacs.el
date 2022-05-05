@@ -133,9 +133,9 @@
 
 (setq user-emacs-directory
       (let* ((s (chemacs-profile-get 'user-emacs-directory)))
-        (if (file-name-absolute-p s)
-            (file-name-as-directory s)
-          (expand-file-name s chemacs-profiles-directory))))
+        (unless (file-name-absolute-p s)
+          (setq s (expand-file-name s chemacs-profiles-directory)))
+        (file-name-as-directory s)))
 
 ;; Allow multiple profiles to each run their server
 ;; use `emacsclient -s profile_name' to connect
