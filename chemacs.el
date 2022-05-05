@@ -45,8 +45,9 @@
                               exclude))
                           sequence))))
 
-(defvar chemacs-profiles-directory (or (car (chemacs--seq-filter #'file-directory-p chemacs-profiles-directories))
-                                       (car chemacs-profiles-directories)))
+(defvar chemacs-default-profiles-directory (or (car (chemacs--seq-filter #'file-directory-p chemacs-profiles-directories))
+      (car chemacs-profiles-directories)))
+
 (defvar chemacs-profiles-path (or (car (chemacs--seq-filter #'file-exists-p chemacs-profiles-paths))
                                   (car chemacs-profiles-paths)))
 (defvar chemacs-default-profile-path (or (car (chemacs--seq-filter #'file-exists-p chemacs-default-profile-paths))
@@ -134,7 +135,7 @@
 (setq user-emacs-directory
       (let* ((s (chemacs-profile-get 'user-emacs-directory)))
         (unless (file-name-absolute-p s)
-          (setq s (expand-file-name s chemacs-profiles-directory)))
+          (setq s (expand-file-name s chemacs-default-profiles-directory)))
         (file-name-as-directory s)))
 
 ;; Allow multiple profiles to each run their server
