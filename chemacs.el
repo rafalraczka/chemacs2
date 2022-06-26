@@ -33,6 +33,7 @@
                               (format "%s/%s" config-home "chemacs")))
 (defvar chemacs-profiles-paths (list "~/.emacs-profiles.el" (format "%s/%s" chemacs-directory "profiles.el")))
 (defvar chemacs-default-profile-paths (list "~/.emacs-profile" (format "%s/%s" chemacs-directory "profile")))
+(defvar chemacs-profiles-directories (list "~/.emacs-profiles/" (format "%s/%s" chemacs-directory "profiles/")))
 (defvar chemacs-profile-env-var "CHEMACS_PROFILE")
 
 ;; Copy `seq' library's `seq-filter' to avoid requiring it, see note above.
@@ -44,6 +45,8 @@
                               exclude))
                           sequence))))
 
+(defvar chemacs-profiles-directory (or (car (chemacs--seq-filter #'file-directory-p chemacs-profiles-directories))
+                                       (car chemacs-profiles-directories)))
 (defvar chemacs-profiles-path (or (car (chemacs--seq-filter #'file-exists-p chemacs-profiles-paths))
                                   (car chemacs-profiles-paths)))
 (defvar chemacs-default-profile-path (or (car (chemacs--seq-filter #'file-exists-p chemacs-default-profile-paths))
@@ -128,8 +131,11 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(setq user-emacs-directory (file-name-as-directory
-                            (chemacs-profile-get 'user-emacs-directory)))
+(setq user-emacs-directory
+      (let* ((s (chemacs-profile-get 'user-emacs-directory)))
+        (if (file-name-absolute-p s)
+            (file-name-as-directory s)
+          (expand-file-name s chemacs-profiles-directory))))
 
 ;; Allow multiple profiles to each run their server
 ;; use `emacsclient -s profile_name' to connect
